@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSoilAI - Piattaforma di Analisi del Suolo Intelligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .soil-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .soil-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .input-highlight {
+            border-left: 4px solid #4CAF50;
+        }
+        .tab-active {
+            border-bottom: 3px solid #4CAF50;
+            font-weight: 600;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-leaf text-green-600 text-2xl"></i>
+                <h1 class="text-xl font-bold text-gray-800">AgroSoil<span class="text-green-600">AI</span></h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#features" class="text-gray-600 hover:text-green-600">Funzionalità</a>
+                <a href="#analysis" class="text-gray-600 hover:text-green-600">Analisi</a>
+                <a href="#community" class="text-gray-600 hover:text-green-600">Community</a>
+                <a href="#about" class="text-gray-600 hover:text-green-600">Chi Siamo</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition">
+                    Accedi
+                </button>
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 py-16 md:py-24">
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Analisi del suolo <span class="text-green-600">intelligente</span> per un'agricoltura rigenerativa
+                </h2>
+                <p class="text-lg text-gray-600 mb-8">
+                    La piattaforma open source che trasforma i dati del tuo terreno in consigli pratici per migliorare la salute del suolo e aumentare la produttività.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md font-medium transition flex items-center justify-center">
+                        <i class="fas fa-flask mr-2"></i> Inizia l'Analisi
+                    </button>
+                    <button class="bg-white hover:bg-gray-100 text-gray-800 px-6 py-3 rounded-md font-medium transition flex items-center justify-center border border-gray-300">
+                        <i class="fab fa-github mr-2"></i> GitHub
+                    </button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative w-full max-w-md">
+                    <div class="absolute -top-6 -left-6 w-32 h-32 bg-green-100 rounded-full opacity-70"></div>
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-yellow-100 rounded-full opacity-70"></div>
+                    <div class="relative bg-white p-6 rounded-xl shadow-lg soil-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800">Report di Esempio</h3>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Nuovo</span>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>pH</span>
+                                <span>6.2 (Ottimale)</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Sostanza Organica</span>
+                                <span>2.1% (Buono)</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Azoto (N)</span>
+                                <span>25 ppm (Basso)</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-red-500 h-2 rounded-full" style="width: 30%"></div>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-gray-200">
+                            <p class="text-sm text-gray-600">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                Consigliato: compost vegetale e sovescio di leguminose
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Come funziona AgroSoilAI</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Una piattaforma completa che combina scienza del suolo, intelligenza artificiale e conoscenze tradizionali per aiutarti a prendere decisioni informate.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-gray-50 p-6 rounded-xl soil-card">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-upload text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Carica i Dati</h3>
+                    <p class="text-gray-600">
+                        Inserisci manualmente o carica i risultati delle analisi del suolo in formato CSV o tramite foto.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl soil-card">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Analisi AI</h3>
+                    <p class="text-gray-600">
+                        La nostra intelligenza artificiale elabora i dati e genera un report completo personalizzato.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl soil-card">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-hands-helping text-yellow-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Consigli Pratici</h3>
+                    <p class="text-gray-600">
+                        Ricevi suggerimenti su ammendanti, rotazioni colturali e pratiche rigenerative.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl soil-card">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Monitoraggio</h3>
+                    <p class="text-gray-600">
+                        Archivia e confronta le analisi nel tempo per valutare i miglioramenti del tuo suolo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Soil Analysis Form -->
+    <section id="analysis" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Analisi del Suolo</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Inserisci i dati del tuo terreno per ottenere un report completo e personalizzato.
+                </p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="flex border-b border-gray-200">
+                    <button class="tab-active px-6 py-4 text-gray-800 font-medium">Dati Base</button>
+                    <button class="px-6 py-4 text-gray-600 hover:text-gray-800 font-medium">Nutrienti</button>
+                    <button class="px-6 py-4 text-gray-600 hover:text-gray-800 font-medium">Tessitura</button>
+                    <button class="px-6 py-4 text-gray-600 hover:text-gray-800 font-medium">Biologia</button>
+                    <button class="px-6 py-4 text-gray-600 hover:text-gray-800 font-medium">Colture</button>
+                </div>
+                
+                <div class="p-6 md:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="input-highlight bg-gray-50 p-4 rounded-lg">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">pH del Suolo</label>
+                            <div class="flex items-center">
+                                <input type="range" min="3" max="10" step="0.1" value="6.5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <span class="ml-4 text-gray-700 font-medium w-12">6.5</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>Acido</span>
+                                <span>Neutro</span>
+                                <span>Alcalino</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-highlight bg-gray-50 p-4 rounded-lg">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sostanza Organica (%)</label>
+                            <div class="flex items-center">
+                                <input type="range" min="0" max="10" step="0.1" value="2.3" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <span class="ml-4 text-gray-700 font-medium w-12">2.3%</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>Basso</span>
+                                <span>Medio</span>
+                                <span>Alto</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-highlight bg-gray-50 p-4 rounded-lg">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">CEC (meq/100g)</label>
+                            <input type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border" placeholder="Inserisci CEC">
+                        </div>
+                        
+                        <div class="input-highlight bg-gray-50 p-4 rounded-lg">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Conducibilità Elettrica (dS/m)</label>
+                            <input type="number" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border" placeholder="Inserisci EC">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Carica i risultati delle analisi</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="fas fa-cloud-upload-alt text-gray-500 text-3xl mb-2"></i>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Clicca per caricare</span> o trascina il file</p>
+                                    <p class="text-xs text-gray-500">CSV, XLSX o immagini (fino a 10MB)</p>
+                                </div>
+                                <input id="dropzone-file" type="file" class="hidden" />
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-end">
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md font-medium transition flex items-center">
+                            <i class="fas fa-magic mr-2"></i> Genera Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Assistant Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Assistente AI per il Tuo Suolo</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Interagisci con il nostro assistente intelligente per chiarire dubbi, approfondire i risultati e ottenere consigli personalizzati per la tua situazione specifica.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span class="text-gray-700">Risposte basate su letteratura scientifica e dati reali</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span class="text-gray-700">Migliora continuamente grazie al machine learning</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span class="text-gray-700">Spiega i concetti in linguaggio semplice o tecnico</span>
+                        </li>
+                    </ul>
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md font-medium transition flex items-center">
+                        <i class="fas fa-robot mr-2"></i> Prova l'Assistente
+                    </button>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-gray-50 rounded-xl shadow-md overflow-hidden max-w-md mx-auto">
+                        <div class="bg-green-600 text-white px-4 py-3 flex items-center">
+                            <i class="fas fa-robot mr-2"></i>
+                            <span class="font-medium">Assistente AgroSoil</span>
+                        </div>
+                        <div class="chat-container p-4 bg-white">
+                            <div class="flex mb-4">
+                                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                                    <p class="text-gray-800">Ciao! Sono l'assistente AgroSoil. Come posso aiutarti con la tua analisi del suolo?</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-end mb-4">
+                                <div class="bg-green-100 rounded-lg p-3 max-w-xs">
+                                    <p class="text-gray-800">Il mio pH è 6.2, è ottimale per i pomodori?</p>
+                                </div>
+                            </div>
+                            <div class="flex mb-4">
+                                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                                    <p class="text-gray-800">6.2 è un ottimo pH per i pomodori! L'intervallo ideale è 5.5-6.8. A questo pH, i nutrienti sono ben disponibili e il rischio di malattie è ridotto.</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-end mb-4">
+                                <div class="bg-green-100 rounded-lg p-3 max-w-xs">
+                                    <p class="text-gray-800">Grazie! E per la sostanza organica al 1.8%?</p>
+                                </div>
+                            </div>
+                            <div class="flex mb-4">
+                                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                                    <p class="text-gray-800">1.8% è accettabile ma potresti migliorare. Consiglio compost vegetale (3-5 t/ha) e sovescio di leguminose per aumentare la sostanza organica e l'azoto.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gray-50 border-t border-gray-200">
+                            <div class="flex">
+                                <input type="text" placeholder="Scrivi la tua domanda..." class="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border">
+                                <button class="bg-green-600 text-white px-4 rounded-r-md">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Unisciti alla Community</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Collabora con altri agricoltori, condividi esperienze e contribuisci a migliorare la piattaforma.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm soil-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-database text-green-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800">Database Condiviso</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Accedi a migliaia di analisi del suolo anonime da tutta Italia per confronti e ricerche.
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-chart-bar mr-2"></i>
+                        <span>Oltre 12.000 analisi disponibili</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm soil-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-code-branch text-blue-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800">Open Source</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Contribuisci allo sviluppo della piattaforma. Il codice è disponibile su GitHub con licenza MIT.
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fab fa-github mr-2"></i>
+                        <span>150+ contributori attivi</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm soil-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-users text-purple-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800">Forum di Discussione</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Condividi le tue esperienze, fai domande e impara da altri agricoltori e tecnici.
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-comments mr-2"></i>
+                        <span>Comunità di 8.000+ membri</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md font-medium transition inline-flex items-center">
+                    <i class="fas fa-user-plus mr-2"></i> Registrati Gratuitamente
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">La Nostra Missione</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        AgroSoilAI nasce dalla collaborazione tra agronomi, sviluppatori e agricoltori con l'obiettivo di democratizzare l'accesso a strumenti avanzati di analisi del suolo.
+                    </p>
+                    <p class="text-gray-600 mb-8">
+                        Crediamo che un'agricoltura sostenibile e rigenerativa parta dalla comprensione e dalla cura del suolo. La nostra piattaforma unisce conoscenze scientifiche, tecnologia e tradizione per supportare gli agricoltori nel prendere decisioni informate.
+                    </p>
+                    <div class="flex space-x-4">
+                        <button class="flex items-center text-green-600 font-medium">
+                            <i class="fas fa-book mr-2"></i> Documentazione
+                        </button>
+                        <button class="flex items-center text-green-600 font-medium">
+                            <i class="fas fa-question-circle mr-2"></i> FAQ
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-xl text-gray-800 mb-4">Il Nostro Team</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Team member" class="w-12 h-12 rounded-full mr-3">
+                                <div>
+                                    <p class="font-medium text-gray-800">Dr. Elena Rossi</p>
+                                    <p class="text-sm text-gray-600">Agronoma</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team member" class="w-12 h-12 rounded-full mr-3">
+                                <div>
+                                    <p class="font-medium text-gray-800">Marco Bianchi</p>
+                                    <p class="text-sm text-gray-600">Sviluppatore AI</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Team member" class="w-12 h-12 rounded-full mr-3">
+                                <div>
+                                    <p class="font-medium text-gray-800">Giulia Verdi</p>
+                                    <p class="text-sm text-gray-600">Esperta Suoli</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Team member" class="w-12 h-12 rounded-full mr-3">
+                                <div>
+                                    <p class="font-medium text-gray-800">Luca Neri</p>
+                                    <p class="text-sm text-gray-600">Agricoltore</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <h4 class="font-medium text-gray-800 mb-3">Supportato da:</h4>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="bg-white p-2 px-4 rounded-md shadow-sm">
+                                    <p class="text-sm font-medium">UniBo</p>
+                                </div>
+                                <div class="bg-white p-2 px-4 rounded-md shadow-sm">
+                                    <p class="text-sm font-medium">CREA</p>
+                                </div>
+                                <div class="bg-white p-2 px-4 rounded-md shadow-sm">
+                                    <p class="text-sm font-medium">EU Horizon</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-green-600 text-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Cosa Dicono di Noi</h2>
+                <p class="text-lg opacity-90 max-w-3xl mx-auto">
+                    Agricoltori, tecnici e ricercatori che utilizzano AgroSoilAI nella loro pratica quotidiana.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="User" class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <p class="font-medium">Maria T.</p>
+                            <p class="text-sm opacity-80">Agricoltrice Biologica</p>
+                        </div>
+                    </div>
+                    <p class="italic opacity-90">
+                        "Finalmente uno strumento che traduce i numeri delle analisi in consigli pratici. Ho migliorato la resa delle mie zucchine del 20% seguendo i suggerimenti sugli ammendanti."
+                    </p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="User" class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <p class="font-medium">Dott. Paolo R.</p>
+                            <p class="text-sm opacity-80">Agronomo</p>
+                        </div>
+                    </div>
+                    <p class="italic opacity-90">
+                        "Utilizzo AgroSoilAI con i miei clienti per spiegare meglio le analisi del suolo. L'assistente AI è sorprendentemente accurato e mi fa risparmiare tempo nelle interpretazioni."
+                    </p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star-half-alt text-yellow-300"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="User" class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <p class="font-medium">Laura B.</p>
+                            <p class="text-sm opacity-80">Viticoltrice</p>
+                        </div>
+                    </div>
+                    <p class="italic opacity-90">
+                        "Il confronto con altri suoli vitati nella mia zona mi ha aiutato a capire problemi specifici del mio terreno. Ora uso meno concimi e ho più biodiversità."
+                    </p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                        <i class="fas fa-star text-yellow-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 gradient-bg">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Pronto a Migliorare il Tuo Suolo?</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+                Unisciti a migliaia di agricoltori che stanno già utilizzando AgroSoilAI per prendere decisioni informate e migliorare la salute dei loro terreni.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-md font-medium transition flex items-center justify-center">
+                    <i class="fas fa-user-plus mr-2"></i> Registrati Gratuitamente
+                </button>
+                <button class="bg-white hover:bg-gray-100 text-gray-800 px-8 py-4 rounded-md font-medium transition flex items-center justify-center border border-gray-300">
+                    <i class="fas fa-play-circle mr-2"></i> Guarda il Tutorial
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-leaf text-green-400 text-2xl mr-2"></i>
+                        <h3 class="text-xl font-bold">AgroSoil<span class="text-green-400">AI</span></h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        La piattaforma intelligente per l'analisi del suolo e l'agricoltura rigenerativa.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Navigazione</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white">Funzionalità</a></li>
+                        <li><a href="#analysis" class="text-gray-400 hover:text-white">Analisi</a></li>
+                        <li><a href="#community" class="text-gray-400 hover:text-white">Community</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white">Chi Siamo</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Risorse</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Documentazione</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">API</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Guida all'Uso</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Contatti</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope text-gray-400 mr-2"></i>
+                            <span class="text-gray-400">info@agrosoil.ai</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                            <span class="text-gray-400">Bologna, Italia</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4">
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-paper-plane mr-2"></i> Contattaci
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2023 AgroSoilAI. Tutti i diritti riservati.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Termini di Servizio</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Licenze</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Range input value display
+            const rangeInputs = document.querySelectorAll('input[type="range"]');
+            rangeInputs.forEach(input => {
+                const valueDisplay = input.nextElementSibling;
+                input.addEventListener('input', () => {
+                    valueDisplay.textContent = input.value;
+                    if(input.getAttribute('id') === 'ph-range') {
+                        valueDisplay.textContent += input.value.includes('.') ? '' : '.0';
+                    }
+                });
+            });
+            
+            // Tab switching
+            const tabs = document.querySelectorAll('.flex.border-b button');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('tab-active'));
+                    tab.classList.add('tab-active');
+                });
+            });
+            
+            // Mobile menu toggle would go here
+            // This is just a placeholder as we'd need more HTML structure
+        });
+    </script>
+</body>
+</html>
